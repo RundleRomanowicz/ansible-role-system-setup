@@ -1,0 +1,23 @@
+- name: Update packages
+  ansible.builtin.apt:
+    upgrade: "{{ apt_upgrade }}"
+    update_cache: yes
+    cache_valid_time: 86400
+
+- name: Clean apt
+  ansible.builtin.apt:
+    autoclean: yes
+
+- name: Clean apt-get
+  command: apt-get clean
+  changed_when: false
+  tags:
+    - skip_ansible_lintc
+
+- name: Update package cache after upgrade
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Ubuntu
+  import_tasks: software/docker-debian.yml
+  when: ansible_distribution in ["Debian", "Pop!_OS", "Ubuntu"]
